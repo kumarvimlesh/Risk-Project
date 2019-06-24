@@ -1,12 +1,37 @@
 <?php
  session_start();
+ 
+ //logout button
+ if(isset($_POST['logout']))
+    {
+       session_destroy();
+       header("Location:index.php");
+    }
+
+//login authentication
+if (isset($_POST['login'])) {
+  if($_POST['username']=='armed' && $_POST['password']=='ssfr')
+  {
+    $_SESSION["username"] = $_POST['username'];
+    header("Location:dashboard.php");
+  }
+  else {
+      ?>
+      <script type="text/javascript">
+        alert("Invalid UserName or Password");
+      </script>
+      <?php
+  }
+ }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
  
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
+	<title>ARMeD | SSFR</title>
+    <link rel="icon" type="image" href="image/IMG-20190523-WA0002.jpg">
+
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	    <link rel="stylesheet" type="text/css" href="styles.css">
 
@@ -48,25 +73,6 @@
         </div>    
   </div>
 <!--login end-->
-
-<!--login authentication-->
-<?php
- if (isset($_POST['login'])) {
- 	if($_POST['username']=='armed' && $_POST['password']=='ssfr')
- 	{
- 		$_SESSION["username"] = $_POST['username'];
- 		$_SESSION['logintime']=time();
- 		header("Location:dashboard.php");
- 	}
- 	else {
- 	    ?>
- 	    <script type="text/javascript">
- 	    	alert("Invalid UserName or Password");
- 	    </script>
- 	    <?php
- 	}
- }
-?>
 
 <!--registration begin-->
 <div id="registrationModal" class="modal fade" style="padding: 0px 0px 0px 0px;margin-top: 0px;">
@@ -128,10 +134,10 @@
   </div>
 <!--registration end-->
 
-    <div class="container-fluid" style="background-color: skyblue;">
+    <div class="container-fluid">
     	<div class="row">
     		<div class="col-sm-9">
-    			<img src="image/ziksan-logo.jpg" class="img-fluid" alt="logo image" style="padding: 20px 20px 20px 20px">
+    			<img src="image/ziksan-logo.jpg" class="img-fluid rounded-corner" alt="logo image" style="padding: 20px 20px 20px 20px;border-radius: 25%;">
     		</div>
     		<div class="col-sm-3" style="margin-top: 20px;">
     			<span class="navbar-text" id="login">
@@ -139,7 +145,9 @@
                       if(isset($_SESSION["username"]))
                        {
                             ?>
-                            <button type="submit" name="logout" class="btn btn-primary">Log Out</a></button>
+                            <form action="index.php" method="post">
+                            	<input style="width: 112px; height: 55px; margin-bottom: 5px;" type="submit" name="logout" class="btn btn-primary" value="Log Out">
+                            </form>
                            <?php
                            }
                         else
@@ -155,30 +163,20 @@
     	</div>
     </div>
 
-<?php
-    if(isset($_POST['logout']))
-       {
-            session_destroy();
-            header("Location:index.php");
-       }
- ?>
-
-    <nav class="navbar stick-top">
-    		<ul style="list-style: none;">
-    			<li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="inquiry.php">Inquiry</a></li>
-                <li class="nav-item"><a class="nav-link" href="about.php">About Us</a></li>
-                <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
-                <li class="nav-item"><a class="nav-link" href=""></a></li>
-    		</ul>
-    </nav>
-
     
-
     <div class="container-fluid">
-    	
+    	 <img class="img-fluid" src="image/IMG-20190523-WA0002.jpg" alt="ARMeD-logo" style="height: 420px;display: block;margin: auto;">
     </div>
 
+<nav class="navbar fixed-bottom" style="height: 60px;">
+        <ul style="list-style: none;">
+          <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="inquiry.php">Inquiry</a></li>
+          <li class="nav-item"><a class="nav-link" href="about.php">About Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
+          <li class="nav-item"><a class="nav-link" href=""></a></li>
+        </ul>
+    </nav>
   
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

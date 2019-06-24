@@ -1,4 +1,15 @@
 <?php
+session_start();
+if(isset($_POST['logout']))
+{
+  session_destroy();
+  header("Location:index.php");
+}
+if(isset($_POST['submit']))
+{
+  header("Location:evidencevideo.php");
+}
+if(isset($_SESSION["username"])){
 ?>
 <!DOCTYPE html>
 <html>
@@ -6,6 +17,7 @@
 <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="styles.css">
+<title>ARMeD | SSFR</title>
 <style>
 * {
   box-sizing: border-box;
@@ -49,39 +61,10 @@ label
             </ul>
             <span>
               <form action="dashboard.php" method="POST">
-                 <?php
-                      if(isset($_SESSION["username"]))
-                       {
-                           ?>
-                           <input class="btn btn-primary" type="submit" name="logout" value="Log Out">
-                           <?php
-                           }
-                           else
-                           {
-                            ?>
-                            <script type="text/javascript">
-                              alert("Please LogIn");
-                            </script>
-                            <input class="btn btn-primary" type="submit" name="login" value="Log In">
-                            <?php
-                           }
-                      ?>  
-                </form>
+                <input class="btn btn-primary" type="submit" name="logout" value="Log Out">
+              </form>
             </span>
     </nav>   
-
-    <?php
-        if(isset($_POST['logout']))
-         {
-            session_destroy();
-            header("Location:index.php");
-         }
-         if(isset($_POST['login']))
-         {
-            header("Location:index.php");
-         }
-    ?>
-
 
         <div class="container-fluid">
             <div id="form" align="center">
@@ -101,15 +84,6 @@ label
                   <input class="btn btn-primary button" type="submit" name="submit" value="Next">
                 </div>
               </form>
-              <?php
-               if(isset($_POST['submit']))
-               {
-                  if($_POST['typeofcrime']=='cyber')
-                  {
-                    header("Location:inquiry1.php");
-                  }
-               }
-              ?>
             </div>
         </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -117,3 +91,9 @@ label
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
+<?php
+}
+else{
+  header("Location:index.php");
+}
+?>
