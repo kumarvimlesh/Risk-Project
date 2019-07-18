@@ -34,7 +34,6 @@ if (isset($_POST['login'])) {
 
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	    <link rel="stylesheet" type="text/css" href="styles.css">
-
     <style type="text/css">
     	
     </style>
@@ -83,7 +82,7 @@ if (isset($_POST['login'])) {
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="POST">
+                    <form action="registration.php" method="POST">
                         <div class="offset-1">
                         	<p class="text-danger">Login and Registration is allowed to specific Officer's only .</p>
                             <div class="form-group row col-sm-12">
@@ -103,9 +102,21 @@ if (isset($_POST['login'])) {
                                <input type="date" style="font-size: 10pt;" id="dob" name="dob" placeholder="Date of Birth" class="form-control col-sm-9" autofocus>
                             </div>
                             <div class="form-group row col-sm-12">
+                               <label for="phone" class="col-sm-3" style="font-size: 12pt;">Mobile Number</label>
+                               <input type="numeric" style="font-size: 10pt;" id="phone" name="phone" placeholder="Mobile Number" class="form-control col-sm-9" autofocus>
+                            </div>
+                            <div class="form-group row col-sm-12">
+                               <label for="email" class="col-sm-3" style="font-size: 12pt;">Email</label>
+                               <input type="email" style="font-size: 10pt;" id="email" name="email" placeholder="examole@gmail.com" class="form-control col-sm-9" autofocus>
+                            </div>
+                            <div class="form-group row col-sm-12">
                                <label for="fathersname" class="col-sm-3" style="font-size: 12pt;">Father's Name</label>
                                <input type="text" style="font-size: 10pt;" id="fathersname" name="fathersname" placeholder="Father's Name" class="form-control col-sm-9" autofocus>
                             </div>
+                            <!--div class="form-group row col-sm-12">
+                               <label for="profilepic" class="col-sm-3" style="font-size: 12pt;">Profile Picture</label>
+                               <input type="file" style="font-size: 10pt;" id="profilepic" name="profilepic" class="form-control col-sm-9" autofocus>
+                            </div-->
                             <div class="form-group row col-sm-12">
                                <label for="branchname" class="col-sm-3" style="font-size: 12pt;">Zone/Branch Name</label>
                                <input type="text" style="font-size: 10pt;" id="branchname" name="branchname" placeholder="Zone/Branch Name" class="form-control col-sm-9" autofocus>
@@ -115,13 +126,13 @@ if (isset($_POST['login'])) {
                                <input type="text" style="font-size: 10pt;" id="pincode" name="pincode" placeholder="Pin Code" class="form-control col-sm-9" autofocus>
                             </div>
                             <div class="form-group row col-sm-12">
-                               <label for="password" class="col-sm-3" style="font-size: 12pt;">Password</label>
-                               <input type="password" style="font-size: 10pt;" id="password" name="password" placeholder="Create Password" class="form-control col-sm-9" autofocus>
+                               <label for="fpassword" class="col-sm-3" style="font-size: 12pt;">Password</label>
+                               <input type="password" style="font-size: 10pt;" id="fpassword" name="fpassword" placeholder="Create Password" class="form-control col-sm-9" autofocus>
                             </div>
-                            <div class="form-group row col-sm-12">
-                               <label for="password" class="col-sm-3" style="font-size: 12pt;">Password</label>
-                               <input type="password" style="font-size: 10pt;" id="password" name="password" placeholder="Confirm Password" class="form-control col-sm-9" autofocus>
-                            </div>
+                            <!--div class="form-group row col-sm-12">
+                               <label for="spassword" class="col-sm-3" style="font-size: 12pt;">Password</label>
+                               <input type="password" style="font-size: 10pt;" id="spassword" name="spassword" placeholder="Confirm Password" class="form-control col-sm-9" autofocus>
+                            </div-->
                             <div class="form-group row col-sm-12">
                             <button type="button" style="font-size: 10pt;" class="btn btn-secondary btn-sm ml-auto" data-dismiss="modal">Cancel</button>
                             <button style="font-size: 10pt;" type="submit" name="register" class="btn btn-primary btn-sm ml-1">Register</button>
@@ -136,17 +147,19 @@ if (isset($_POST['login'])) {
 
     <div class="container-fluid">
     	<div class="row">
-    		<div class="col-sm-9">
+    		<div class="col-sm-8">
     			<img src="image/ziksan-logo.jpg" class="img-fluid rounded-corner" alt="logo image" style="padding: 20px 20px 20px 20px;border-radius: 25%;">
     		</div>
-    		<div class="col-sm-3" style="margin-top: 20px;">
+    		<div class="col-sm-4" style="margin-top: 20px;">
     			<span class="navbar-text" id="login">
     				<?php
                       if(isset($_SESSION["username"]))
                        {
                             ?>
                             <form action="index.php" method="post">
-                            	<input style="width: 112px; height: 55px; margin-bottom: 5px;" type="submit" name="logout" class="btn btn-primary" value="Log Out">
+                              <button style="height: 53px;width: 110px;" class="btn btn-primary" type="submit" name="logout">Log Out</button>
+                              <button class="btn btn-primary"><a style="color: #fff;" class="nav-link" href="#" data-toggle="modal" data-target="#registrationModal">Register</a></button>
+                              <button class="btn btn-primary"><a style="color: #fff;" class="nav-link" href="#" data-toggle="modal" data-target="#adminModal">Admin</a></button>
                             </form>
                            <?php
                            }
@@ -154,15 +167,15 @@ if (isset($_POST['login'])) {
                         {
                            ?>
                              <button class="btn btn-primary"><a style="color: #fff;" class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Log In</a></button>
+                             <button class="btn btn-primary"><a style="color: #fff;" class="nav-link" href="#" data-toggle="modal" data-target="#registrationModal">Register</a></button>
+                             <button class="btn btn-primary"><a style="color: #fff;" class="nav-link" href="#" data-toggle="modal" data-target="#adminModal">Admin</a></button>
                             <?php
                         }
                     ?>  
-                    <button class="btn btn-primary"><a style="color: #fff;" class="nav-link" href="#" data-toggle="modal" data-target="#registrationModal">Register</a></button>
               </span>
     		</div>
     	</div>
     </div>
-
     
     <div class="container-fluid">
     	 <img class="img-fluid" src="image/IMG-20190523-WA0002.jpg" alt="ARMeD-logo" style="height: 420px;display: block;margin: auto;">

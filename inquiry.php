@@ -65,7 +65,18 @@ label
             color: #000;
             background-color: #fff;
         }
-
+.notlogin {
+  position: relative;
+  text-align: center;
+  color: white;
+  opacity: 0.4;
+}
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
 <body>
 
@@ -166,9 +177,10 @@ label
           else
           {
             ?>
-            <script type="text/javascript">
-              alert("Please Log In to Start Investigation");
-            </script>
+            <div class="notlogin">
+              <img src="image/EvidenceCollection.jpg" style="width:100%;" height="553">
+              <div class="centered"><h1 style="font-family:serif;background-image: url('image/fingerprint.jfif');background-size: 400px 250px;height: 250px;width: 500px;padding-top: 80px;">Please Log In to Proceed!</h1></div>
+            </div>
             <?php 
           }
         ?>

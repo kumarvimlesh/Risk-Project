@@ -4,6 +4,7 @@
     session_destroy();
     header("Location:index.php");
  }
+ $con=mysqli_connect('localhost','root','','armed-ssfr');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +26,7 @@
            }
 .tab button {
   display: block;
-  background-color: inherit;
+  background-color: #abc;
   color: black;
   padding:8px 5px;
   width: 100%;
@@ -36,8 +37,10 @@
   transition: 0.3s;
 }
 .tab button:hover {
-  background-color: #ccc;
+  background-color: #27f;
+  color: white;
   width: 100%;
+  text-align: center;
 }
 .tab button.active {
   background-color: #bbb;
@@ -66,7 +69,7 @@
     </style>
 </head>
 <body>
-  
+
   <nav class="navbar sticky-top">
             <ul style="list-style: none;">
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
@@ -94,10 +97,22 @@
             </div>
             <div>
                <video class="col-sm-12" height="456px" controls></video>
+               <form class="row" action="upload.php" method="post" enctype="multipart/form-data">
+                 <label for="image" class="col-sm-12">Upload Image</label>
+                 <input type="file" name="fileToUpload" id="fileToUpload" class="form-control col-sm-7 offset-1">
+                 <input type="submit" value="Upload" name="submit" class="form-control col-sm-3 btn btn-primary">
+               </form>
+
+               <form class="row" action="uploadvideo.php" method="post" enctype="multipart/form-data">
+                 <label for="video" class="col-sm-12">Upload Video</label>
+                 <input type="file" name="videofile" id="videofile" class="form-control col-sm-7 offset-1">
+                 <input type="submit" value="Upload" name="submit" class="form-control col-sm-3 btn btn-primary">
+               </form>
+
                <h6 style="text-align: center;">video url : <span id="mytext"></span></h6>
             </div>
         </div>
-        <div class="col-sm-2" style="margin-top:35px;">
+        <div class="col-sm-2 " style="margin-top:35px;">
             <div class="tab">
               <button>Computer</button>
               <button>Laptop</button>
@@ -140,19 +155,26 @@
               <button class="btn openbtn" onclick="document.getElementById('radio').style.width ='400px'"><img src="image/radio.jpg" class="img-fluid" height="50" width="50"></button>
               <button class="btn openbtn" onclick="document.getElementById('watch').style.width ='400px'"><img src="image/watch.jfif" class="img-fluid" height="50" width="50"></button>
               <button class="btn openbtn" onclick="document.getElementById('audio').style.width ='400px'"><img src="image/audiorecord.jfif" class="img-fluid" height="50" width="50"></button>
+              <button class="btn col-sm-10 offset=1 btn-primary openbtn" onclick="document.getElementById('addhelpbutton').style.width ='400px'">Add Another Help</button>
             </div>
             <!--Sidepannels Begin-->
             <div id="computer" class="sidepanel" style="margin-top: 80px;">
                 <button class="closebtn btn-primary" onclick="document.getElementById('computer').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
                   <ul>
-                    <li>Leave a computer or electronic device off if it is already turned off.</li>
-                    <li>Components such as keyboard, mouse, removable storage media, and other items may hold latent evidence such as fingerprints, DNA, or other physical evidence that should be preserved. First responders should take the appropriate steps to ensure that physical evidence is not compromised during documentation</li>
-                    <li>If a computer is on or the power state cannot be determined, the first responder should—<br>
-                    ■ Look and listen for indications that the computer is powered on. Listen for the sound of fans running, drives spinning, or check to see if light emitting diodes (LEDs) are on.</br>
-                    ■Check the display </br>
-                    ■Check for any type of internet connection or any other network connection. Identify it.</li>
-                    <li>Use gloves, rap aluminium foil or suitable material provided by crime branch to seize device</li>
+                    <?php
+                     if($con){
+                        $sql="select description from helpdesk where category='computer'";
+                        $query = mysqli_query($con,$sql);
+                          while($row2 = $query->fetch_assoc()){
+                            echo "<li>".$row2['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
                   </ul>
                 </div>
             </div>
@@ -160,12 +182,19 @@
                 <button class="closebtn btn-primary" onclick="document.getElementById('general').style.width = '0';">×</button>
                  <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
                    <ul>
-                     <li>Follow departmental policy for securing crime scenes</li>
-                     <li>Immediately secure all electronic devices, including personal or portable devices</li>
-                     <li>Ensure that no unauthorized person has access to any electronic devices at the crime scene.</li>
-                     <li>Refuse offers of help or technical assistance from any unauthorized persons</li>
-                     <li>Remove all persons from the crime scene or the immediate area from which evidence is to be collected</li>
-                     <li>Ensure that the condition of any electronic device is not altered.</li>
+                     <?php
+                     if($con){
+                        $sqlg="select description from helpdesk where category='general'";
+                        $queryg = mysqli_query($con,$sqlg);
+                          while($rowg = $queryg->fetch_assoc()){
+                            echo "<li>".$rowg['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
                    </ul>
                  </div>
             </div>
@@ -173,10 +202,19 @@
                 <button class="closebtn btn-primary" onclick="document.getElementById('mobile').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
                   <ul>
-                    <li>Take a photo of mobile phone.</li>
-                    <li>If phone is switched of leave it as it is.</li>
-                    <li>If it is on check for any network connection.</li>
-                    <li>Seaze the phone using gloves and use faradey bag or aluminium foil to keep device protected from any type of signal recieving and sending.</li>
+                    <?php
+                     if($con){
+                        $sqlm="select description from helpdesk where category='mobile'";
+                        $querym = mysqli_query($con,$sqlm);
+                          while($rowm = $querym->fetch_assoc()){
+                            echo "<li>".$rowm['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
                   </ul>
                 </div>
             </div>
@@ -184,69 +222,207 @@
                 <button class="closebtn btn-primary" onclick="document.getElementById('laptop').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
                   <ul>
-                    <li>Take photos of laptop.</li>
-                    <li>Check for any attached external device to laptop such as USB Drive,Data Cable,EarPhones or any other device.</li>
-                    <li>Check for power on or off by touching TouchPad.</li>
-                    <li>If laptop is switched off leave it as it is.</li>
-                    <li> Photograph the uniquely labeled cords, cables, wires, and devices connected to the laptop and the corresponding labeled connections they occupied</li>
-                    <li>If it is on check for any network connection.</li>
-                    <li>Disconnect and secure all cables, wires, and USB drives from the computer and document the equipment or device connected at the opposite end.</li>
-                    <li>Place tape over the floppy disk slot, if present.</li>
-                    <li>Make sure that the CD or DVD drive trays are retracted into place; note whether these drive trays are empty, contain disks, or are unchecked; and tape the drive slot closed to prevent it from opening.</li>
-                    <li>Place tape over the power switch.</li>
-                    <li>Record the make, model, serial numbers, and any user-applied markings or identifiers.</li>
-                    <li>Record or log the computer and all its cords, cables, wires, devices, and components according to agency procedures.</li>
-                    <li>Package all evidence collected following agency procedures to prevent damage or alteration during transportation and storage.</li>
-                    <li>Seaze the laptop using gloves and use faradey bag or aluminium foil to keep device protected from any type of signal recieving and sending.</li>
+                    <?php
+                     if($con){
+                        $sqllap="select description from helpdesk where category='laptop'";
+                        $querylap = mysqli_query($con,$sqllap);
+                          while($rowlap = $querylap->fetch_assoc()){
+                            echo "<li>".$rowlap['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
                   </ul>
                 </div>
             </div>
             <div id="telephone" class="sidepanel" style="margin-top: 80px;">
                 <button class="closebtn btn-primary" onclick="document.getElementById('telephone').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
-                  
+                  <ul>
+                    <?php
+                     if($con){
+                        $sqlt="select description from helpdesk where category='telephone'";
+                        $queryt = mysqli_query($con,$sqlt);
+                          while($rowt = $queryt->fetch_assoc()){
+                            echo "<li>".$rowt['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
+                  </ul>
                 </div>
             </div>
             <div id="tv" class="sidepanel" style="margin-top: 80px;">
                 <button class="closebtn btn-primary" onclick="document.getElementById('tv').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
-                  
+                  <ul>
+                    <?php
+                     if($con){
+                        $sqltv="select description from helpdesk where category='tv'";
+                        $querytv = mysqli_query($con,$sqltv);
+                          while($rowtv = $querytv->fetch_assoc()){
+                            echo "<li>".$rowtv['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
+                  </ul>
                 </div>
             </div>
             <div id="tablet" class="sidepanel" style="margin-top: 80px;">
                 <button class="closebtn btn-primary" onclick="document.getElementById('tablet').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
-                  
+                  <ul>
+                    <?php
+                     if($con){
+                        $sqltab="select description from helpdesk where category='tablet'";
+                        $querytab = mysqli_query($con,$sqltab);
+                          while($rowtab = $querytab->fetch_assoc()){
+                            echo "<li>".$rowtab['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
+                  </ul>
                 </div>
             </div>
             <div id="printer" class="sidepanel" style="margin-top: 80px;">
                 <button class="closebtn btn-primary" onclick="document.getElementById('printer').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
-                  
+                  <ul>
+                    <?php
+                     if($con){
+                        $sqlprint="select description from helpdesk where category='printer'";
+                        $queryprint = mysqli_query($con,$sqlprint);
+                          while($rowprint = $queryprint->fetch_assoc()){
+                            echo "<li>".$rowprint['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
+                  </ul>
                 </div>
             </div>
             <div id="camera" class="sidepanel" style="margin-top: 80px;">
                 <button class="closebtn btn-primary" onclick="document.getElementById('camera').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
-                  
+                  <ul>
+                    <?php
+                     if($con){
+                        $sqlcam="select description from helpdesk where category='camera'";
+                        $querycam = mysqli_query($con,$sqlcam);
+                          while($rowcam = $querycam->fetch_assoc()){
+                            echo "<li>".$rowcam['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
+                  </ul>
                 </div>
             </div>
             <div id="watch" class="sidepanel" style="margin-top: 80px;">
                 <button class="closebtn btn-primary" onclick="document.getElementById('watch').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
-                  
+                  <ul>
+                    <?php
+                     if($con){
+                        $sqlwa="select description from helpdesk where category='watch'";
+                        $querywa = mysqli_query($con,$sqlwa);
+                          while($rowwa = $querywa->fetch_assoc()){
+                            echo "<li>".$rowwa['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
+                  </ul>
                 </div>
             </div>
             <div id="radio" class="sidepanel" style="margin-top: 80px;">
                 <button class="closebtn btn-primary" onclick="document.getElementById('radio').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
-                  
+                  <ul>
+                    <?php
+                     if($con){
+                        $sqlrad="select description from helpdesk where category='radio'";
+                        $queryrad = mysqli_query($con,$sqlrad);
+                          while($rowrad = $queryrad->fetch_assoc()){
+                            echo "<li>".$rowrad['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
+                  </ul>
                 </div>
             </div>
             <div id="audio" class="sidepanel" style="margin-top: 80px;">
                 <button class="closebtn btn-primary" onclick="document.getElementById('audio').style.width = '0';">×</button>
                 <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
-                  
+                  <ul>
+                    <?php
+                     if($con){
+                        $sqlaud="select description from helpdesk where category='audio'";
+                        $queryaud = mysqli_query($con,$sqlaud);
+                          while($rowaud = $queryaud->fetch_assoc()){
+                            echo "<li>".$rowaud['description']."</li>";
+                        }
+                      }
+                     else{
+                      die("Connection failed: " . mysqli_connect_error());
+                      echo "error to connecting to the database";
+                     }
+                    ?>
+                  </ul>
+                </div>
+            </div>
+            <div id="addhelpbutton" class="sidepanel" style="margin-top: 80px;">
+                <button class="closebtn btn-primary" onclick="document.getElementById('addhelpbutton').style.width = '0';">×</button>
+                <div style="padding: 10px 10px 10px 10px;margin-bottom: 60px;">
+                  <form action="evidence.php" method="POST">
+                    <label for="category" class="col-sm-8" style="margin-top: 10px;">Select from following</label>
+                    <select class="form-control col-sm-8" id="category" name="category">
+                      <option>select</option>
+                      <option>general</option>
+                      <option>computer</option>
+                      <option>laptop</option>
+                      <option>mobile</option>
+                      <option>telephone</option>
+                      <option>tv</option>
+                      <option>tablet</option>
+                      <option>printer</option>
+                      <option>camera</option>
+                      <option>watch</option>
+                      <option>radio</option>
+                      <option>audio</option>
+                    </select>
+
+                    <label for="description" class="col-sm-8">Description</label>
+                    <textarea class="form-control" rows="8" name="description" placeholder="write description" style="margin-top: 10px;"></textarea>
+                    <button class="col-sm-12 btn btn-primary" type="submit" name="addhelp" style="margin-top: 10px;">Add Help</button>
+                  </form>
                 </div>
             </div>
             <!--Sidepannel end-->
@@ -355,6 +531,9 @@
         });
 
 </script>
+<script type="text/javascript">
+  
+</script>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -362,3 +541,4 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
+
